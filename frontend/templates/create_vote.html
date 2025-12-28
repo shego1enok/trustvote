@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Создать голосование — TrustVote{% endblock %}
+
+{% block content %}
+<div class="form-box">
+    <h2>✨ Создать новое голосование</h2>
+    <p>Настройте всё за пару минут — и запустите честные школьные выборы.</p>
+
+    <form method="POST">
+        <!-- Основная информация -->
+        <div class="section">
+            <h3>📝 Основная информация</h3>
+            <div class="field">
+                <label for="title">Название голосования *</label>
+                <input type="text" id="title" name="title" placeholder="Выборы старосты 10А" required>
+            </div>
+            <div class="field">
+                <label for="description">Описание (необязательно)</label>
+                <textarea id="description" name="description" rows="4" placeholder="Краткое описание цели голосования..."></textarea>
+            </div>
+        </div>
+
+        <!-- Кандидаты -->
+        <div class="section">
+            <h3>👥 Кандидаты или варианты *</h3>
+            <div class="field">
+                <label>Введите по одному кандидату/варианту на строку:</label>
+                <textarea name="candidates" rows="6" placeholder="Иванов Иван&#10;Петрова Анна&#10;Сидоров Максим" required></textarea>
+            </div>
+        </div>
+
+        <!-- Настройки голосования -->
+        <div class="section">
+            <h3>⚙️ Настройки голосования</h3>
+
+            <div class="settings-grid">
+                <!-- Длительность -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <span class="icon">🕒</span>
+                        <label for="duration">Длительность голосования *</label>
+                    </div>
+                    <select id="duration" name="duration" required>
+                        <option value="1">1 час</option>
+                        <option value="6">6 часов</option>
+                        <option value="12">12 часов</option>
+                        <option value="24" selected>24 часа (1 день)</option>
+                        <option value="48">48 часов</option>
+                        <option value="72">3 дня</option>
+                    </select>
+                </div>
+
+                <!-- Анонимное голосование -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <span class="icon">🔒</span>
+                        <label>
+                            <input type="checkbox" name="is_anonymous" checked>
+                            Анонимное голосование
+                        </label>
+                    </div>
+                    <p class="setting-desc">Невозможно определить, кто за кого проголосовал.</p>
+                </div>
+
+                <!-- Множественный выбор -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <span class="icon">✅</span>
+                        <label>
+                            <input type="checkbox" name="allow_multiple">
+                            Множественный выбор
+                        </label>
+                    </div>
+                    <p class="setting-desc">Можно голосовать за несколько кандидатов.</p>
+                </div>
+
+                <!-- Показывать результаты -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <span class="icon">👁️</span>
+                        <label>
+                            <input type="checkbox" name="show_results_live" checked>
+                            Показывать результаты
+                        </label>
+                    </div>
+                    <p class="setting-desc">
+                        Если отключено — результаты будут скрыты до окончания голосования.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка создания -->
+        <button type="submit" class="btn-create">🚀 Создать голосование</button>
+    </form>
+
+    <!-- Инструкция по использованию кода -->
+    <div class="instruction-box">
+        <h3>📋 Как использовать код сессии</h3>
+        <p>1. Скопируйте код выше (например: <code>wpg8rargri94</code>)</p>
+        <p>2. Перейдите по ссылке:
+           <code>{{ request.url_root }}vote/ваш_код</code>
+        </p>
+        <p>Пример: <code>{{ request.url_root }}vote/wpg8rargri94</code></p>
+        <p>3. Или отсканируйте QR-код ниже 👇</p>
+    </div>
+
+    <!-- QR-код (появится после создания) -->
+    <div id="qrContainer" style="display: none; margin: 20px auto; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 12px;">
+        <h3>📱 Отсканируйте QR-код</h3>
+        <div id="qrcode" style="margin: 10px auto;"></div>
+        <p style="font-size: 0.9rem; color: #636e72;">
+            Ссылка для голосования: <br>
+            <code id="qrUrl" style="word-break: break-all;"></code>
+        </p>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">← Вернуться на главную</a>
+</div>
+
+<style>
+.instruction-box {
+    background: #e9f5ff;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 20px 0;
+    font-size: 0.95rem;
+}
+.instruction-box h3 {
+    margin-top: 0;
+    color: #2d3436;
+}
+.instruction-box code {
+    background: #d0eaff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+</style>
+{% endblock %}

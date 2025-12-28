@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Результаты — {{ session.title }}{% endblock %}
+
+{% block content %}
+<div class="form-box">
+    <h2>📊 Результаты: {{ session.title }}</h2>
+
+    {% if session.description %}
+        <p class="session-desc">{{ session.description }}</p>
+    {% endif %}
+
+    <div class="results-info">
+        <span>Всего голосов: {{ total_votes }}</span>
+        <span>Блоков в цепи: {{ block_count }}</span>
+        <span>Статус:
+            {% if is_valid %}
+                <span class="status-valid">✅ Целостность подтверждена</span>
+            {% else %}
+                <span class="status-invalid">❌ Нарушение целостности!</span>
+            {% endif %}
+        </span>
+    </div>
+
+    {% if results %}
+    <div class="chart-container">
+        {% for result in results %}
+        <div class="chart-bar">
+            <div class="bar-label">
+                <span class="candidate-name">{{ result.name }}</span>
+                <span class="vote-count">{{ result.votes }} ({{ "%.1f"|format(result.percent) }}%)</span>
+            </div>
+            <div class="bar-outer">
+                <div class="bar-inner" style="width: {{ result.percent }}%;"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Нет голосов для отображения.</p>
+    {% endif %}
+
+    <div class="blockchain-info">
+        <h3>🔒 Аудит блокчейна</h3>
+        <p>Любой может проверить честность подсчета. Каждый голос зафиксирован в блокчейне и защищён криптографией.</p>
+        <button id="toggleJournal" class="btn-outline" data-session-id="{{ session.id }}">Показать журнал голосов</button>
+        <button onclick="downloadPDF('{{ session.id }}')" class="btn-outline">Скачать PDF-отчёт</button>
+
+        <div id="journalContainer" style="display: none; margin-top: 20px;">
+            <h4>Журнал голосов ({{ total_votes }} записей):</h4>
+            <div id="journalContent"></div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">← Вернуться на главную</a>
+</div>
+
+<script>
+function downloadPDF(sessionId) {
+    window.location.href = `/api/results/${sessionId}/pdf`;
+}
+</script>
+{% endblock %}

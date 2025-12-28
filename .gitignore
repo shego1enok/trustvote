@@ -1,0 +1,21 @@
+# База данных (локальная)
+*.db
+trustvote.db
+
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Виртуальное окружение
+venv/
+env/
+.env
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Логи и временные файлы
+*.log
+*.tmp

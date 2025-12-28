@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Голосование — {{ session.title }}{% endblock %}
+
+{% block content %}
+<div class="form-box">
+    <h2>🗳️ {{ session.title }}</h2>
+
+    {% if session.description %}
+        <p class="session-desc">{{ session.description }}</p>
+    {% endif %}
+
+    <div class="session-info">
+        <span>Длительность: {{ session.duration_hours }} часов</span>
+        <span>Анонимность: {% if session.is_anonymous %}Да{% else %}Нет{% endif %}</span>
+        <span>Множественный выбор: {% if session.allow_multiple %}Разрешён{% else %}Нет{% endif %}</span>
+    </div>
+
+    <form method="POST" class="voting-form">
+        <h3>Выберите кандидата(ов):</h3>
+
+        <div class="candidates-grid">
+            {% for candidate in candidates %}
+            <label class="candidate-card">
+                {% if session.allow_multiple %}
+                    <input type="checkbox" name="candidate" value="{{ candidate.id }}">
+                {% else %}
+                    <input type="radio" name="candidate" value="{{ candidate.id }}" required>
+                {% endif %}
+                <div class="candidate-name">{{ candidate.name }}</div>
+            </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn-primary">Проголосовать</button>
+    </form>
+
+    <a href="{{ url_for('index') }}" class="back-link">← Вернуться на главную</a>
+</div>
+{% endblock %}

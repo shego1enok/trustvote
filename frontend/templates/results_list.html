@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Результаты — TrustVote{% endblock %}
+
+{% block content %}
+<div class="form-box">
+    <h2>📊 Мои голосования</h2>
+    <p>Список всех созданных вами голосований</p>
+
+    {% if sessions %}
+        <div class="sessions-list">
+            {% for s in sessions %}
+            <div class="session-item">
+                <h3>{{ s.title }}</h3>
+                <p class="desc">{{ s.description or '—' }}</p>
+                <div class="meta">
+                    <span>Создано: {{ s.created_at.split(' ')[0] }}</span>
+                    <span>Голосов: ?</span>
+                </div>
+                <a href="{{ url_for('results_page', session_id=s.id) }}" class="btn-small">Просмотреть результаты</a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>У вас пока нет голосований.</p>
+        <a href="{{ url_for('create_vote') }}" class="btn-primary">Создать первое</a>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}" class="back-link">← Вернуться на главную</a>
+</div>
+
+<style>
+.sessions-list {
+    margin-top: 20px;
+}
+
+.session-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 4px solid #6c5ce7;
+}
+
+.session-item h3 {
+    color: #2d3436;
+    margin-bottom: 8px;
+}
+
+.desc {
+    color: #636e72;
+    margin-bottom: 10px;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #636e72;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+</style>
+{% endblock %}
